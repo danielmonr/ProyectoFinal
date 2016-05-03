@@ -1,21 +1,13 @@
 #include "juego.h"
 #include "ui_juego.h"
+#include <math.h>
+#include <string.h>
 
 Juego::Juego(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Juego)
 {
 
-    botones = (QPushButton**) malloc (9*sizeof(QPushButton*));
-    *botones = ui->b1;
-    *(botones+1) = ui->b2;
-    *(botones+2) = ui->b3;
-    *(botones+3) = ui->b4;
-    *(botones+4) = ui->b5;
-    *(botones+5) = ui->b6;
-    *(botones+6) = ui->b7;
-    *(botones+7) = ui->b8;
-    *(botones+8) = ui->b9;
 
     if(Config::mod_st){
         mod = 2;
@@ -52,8 +44,8 @@ Juego::Juego(QWidget *parent) :
     for (int i = 0; i < 9; i++){
         matResultado[i] = 0;
     }
-
     generaMatriz(matInicial, mod);
+
 
     if(!Config::jugar_st){
         if(Config::orig_st)
@@ -63,13 +55,27 @@ Juego::Juego(QWidget *parent) :
     }
 
     ui->setupUi(this);
+    //cout<<button[0][0]->text().toStdString()<<endl;
+    cambiaTextoInicial();
 }
 
 Juego::~Juego()
 {
     delete ui;
 }
+void Juego::cambiaTextoInicial(){
+    QString s;
+    ui->b1->setText(QString::number(matInicial[0]));
+    ui->b2->setText(QString::number(matInicial[1]));
+    ui->b3->setText(QString::number(matInicial[2]));
+    ui->b4->setText(QString::number(matInicial[3]));
+    ui->b5->setText(QString::number(matInicial[4]));
+    ui->b6->setText(QString::number(matInicial[5]));
+    ui->b7->setText(QString::number(matInicial[6]));
+    ui->b8->setText(QString::number(matInicial[7]));
+    ui->b9->setText(QString::number(matInicial[8]));
 
+}
 //funcion que genera aleatoriamente una matriz segun el modulo seleccionado
 void Juego::generaMatriz(int matInicial[9], int mod){
     for (int i = 0; i < 9; i++){
@@ -80,6 +86,8 @@ void Juego::generaMatriz(int matInicial[9], int mod){
         cout << matInicial[i] << " ";
     }
     cout << endl;
+
+
 }
 
 // Funcion que ayuda al usuario a generar la matriz inicial
@@ -104,7 +112,7 @@ void Juego::escogeMatriz(int matInicial[9], int mod){
 // Funcion que resuleve el problema.
 void Juego::resuelveProblema(int restaMatInicialFinal[9], int matInicial[9], int matFinal[9], int matTransf[N][N], int mod, int op){
     for (int i = 0; i < 9; i++){
-        // GEneracion de la matriz suma
+        // Generacion de la matriz suma
         if ((matFinal[i] - matInicial[i]) < 0){
             restaMatInicialFinal[i] = ((matFinal[i] - matInicial[i]) + mod);
         }
@@ -199,53 +207,195 @@ void Juego::gaussJordan(int A [][N], int* b, int mod) {
     }
 }
 
-void Juego::setNumeros(int matriz[9]){
-    for(int i = 0; i < 9; ++i){
-        (*(botones+i))->setText(QString("%1").arg(matriz[i]));
-    }
-}
-
 void Juego::on_b1_clicked()
 {
-
+    //Modulo 2 en juego con matriz original (valido para matriz especial)
+    if(Config::jugar_st && Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%2));
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%2));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+    }
+    //Modulo 3 en juego con matriz original  (valido para matriz especial)
+    if(Config::jugar_st && !Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%3));
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%3));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+    }
 }
 
 void Juego::on_b2_clicked()
 {
+    if(Config::jugar_st && Config::orig_st && Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%2));
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%2));
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && Config::orig_st && !Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%3));
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%3));
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%3));
+    }
+     //Modulo 2 en juego con matriz  especial
+    if(Config::jugar_st && !Config::orig_st && Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%2));
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%2));
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+    }
+    //Modulo 3 en juego con matriz  especial
+    if(Config::jugar_st && !Config::orig_st && !Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%3));
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%3));
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+    }
 
 }
 
 void Juego::on_b3_clicked()
 {
-
+    if(Config::jugar_st && Config::mod_st){
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%2));
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && !Config::mod_st){
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%3));
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%3));
+    }
 }
 
 void Juego::on_b4_clicked()
 {
-
+    if(Config::jugar_st && Config::orig_st && Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%2));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%2));
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%2));
+     }
+    if(Config::jugar_st && Config::orig_st && !Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%3));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%3));
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%3));
+     }
+    if(Config::jugar_st && !Config::orig_st && Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%2));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%2));
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+     }
+    if(Config::jugar_st && !Config::orig_st && !Config::mod_st){
+        ui->b1->setText(QString::number((ui->b1->text().toInt()+1)%3));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%3));
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+     }
 }
 
 void Juego::on_b5_clicked()
 {
-
+    if(Config::jugar_st && Config::mod_st){
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%2));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%2));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && !Config::mod_st){
+        ui->b2->setText(QString::number((ui->b2->text().toInt()+1)%3));
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%3));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
+    }
 }
 
 void Juego::on_b6_clicked()
 {
-
+    if(Config::jugar_st && Config::orig_st && Config::mod_st){
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%2));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%2));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && Config::orig_st && !Config::mod_st){
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%3));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%3));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
+    }
+    if(Config::jugar_st && !Config::orig_st && Config::mod_st){
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%2));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%2));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && !Config::orig_st && !Config::mod_st){
+        ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%3));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%3));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+    }
 }
 
 void Juego::on_b7_clicked()
 {
+    if(Config::jugar_st  && Config::mod_st){
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%2));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && !Config::mod_st){
+        ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%3));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
+    }
+
 
 }
 
 void Juego::on_b8_clicked()
 {
-
+    if(Config::jugar_st && Config::orig_st && Config::mod_st){
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%2));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%2));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && Config::orig_st && !Config::mod_st){
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%3));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
+    }
+    if(Config::jugar_st && !Config::orig_st && Config::mod_st){
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%2));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%2));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%2));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && !Config::orig_st && !Config::mod_st){
+        ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%3));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+    }
 }
 
 void Juego::on_b9_clicked()
 {
-
+    if(Config::jugar_st && Config::mod_st){
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%2));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%2));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%2));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%2));
+    }
+    if(Config::jugar_st && !Config::mod_st){
+        ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
+        ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%3));
+        ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
+        ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
+    }
 }

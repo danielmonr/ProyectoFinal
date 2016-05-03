@@ -51,8 +51,7 @@ private:
     int matResultado[9];
 
     Ui::Juego *ui;
-    QPushButton** botones;
-
+    void cambiaTextoInicial();
     void generaMatriz(int[N], int);
     void escogeMatriz(int[N], int);
     void resuelveProblema(int[N], int[N], int[N], int[N][N], int, int);
@@ -62,8 +61,6 @@ private:
     void intercambiarRenglones(int* x, int* y, int n);
     void escalarRenglon(int* x, int alfa, int mod, int n);
     void sumarRenglon(int* x, int* y, int alfa, int mod, int n);
-
-    void setNumeros(int[N]);
 };
 
 #endif // JUEGO_H
