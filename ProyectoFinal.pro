@@ -17,17 +17,20 @@ SOURCES += main.cpp\
     dialogmodulo.cpp \
     juego.cpp \
     config.cpp \
-    seleccionmatriz.cpp
+    seleccionmatriz.cpp \
+    solucion.cpp
 
 HEADERS  += ventana.h \
     dialogmodulo.h \
     config.h \
     juego.h \
-    seleccionmatriz.h
+    seleccionmatriz.h \
+    solucion.h
 
 FORMS    += ventana.ui \
     dialogmodulo.ui \
     juego.ui \
-    seleccionmatriz.ui
+    seleccionmatriz.ui \
+    solucion.ui
 
 DISTFILES +=
