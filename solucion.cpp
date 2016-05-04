@@ -1,6 +1,6 @@
 #include "solucion.h"
 #include "ui_solucion.h"
-
+#include <math.h>
 Solucion::Solucion(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Solucion)

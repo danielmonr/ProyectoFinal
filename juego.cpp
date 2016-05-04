@@ -15,7 +15,7 @@ Juego::Juego(QWidget *parent) :
     else{
         mod = 3;
     }
-
+    won = false;
     int matOriginal[N][N] = {
                     { 1, 1, 0, 1, 0, 0, 0, 0, 0 },
                     { 1, 1, 1, 0, 1, 0, 0, 0, 0 },
@@ -47,16 +47,17 @@ Juego::Juego(QWidget *parent) :
     generaMatriz(matInicial, mod);
 
 
-    if(!Config::jugar_st){
+    /*if(!Config::jugar_st){
         if(Config::orig_st)
             resuelveProblema(restaMatInicialFinal, matInicial, matFinal, matOriginal, mod, 1);
         else
             resuelveProblema(restaMatInicialFinal, matInicial, matFinal, matPersonalizada, mod, 2);
-    }
+    }*/
 
     ui->setupUi(this);
     //cout<<button[0][0]->text().toStdString()<<endl;
     cambiaTextoInicial();
+    ui->label->hide();
 }
 
 Juego::~Juego()
@@ -89,7 +90,7 @@ void Juego::generaMatriz(int matInicial[9], int mod){
 
 
 }
-
+/*
 // Funcion que ayuda al usuario a generar la matriz inicial
 void Juego::escogeMatriz(int matInicial[9], int mod){
     cout << "Siguiendo el esquema: " << endl << "1 2 3" << endl << "4 5 6" << endl << "7 8 9" << endl;
@@ -170,9 +171,43 @@ void Juego::sumarRenglon(int* x, int* y, int alfa, int mod, int n) {
         x[i] = modulo(x[i] + (alfa * y[i]), mod);
 }
 
+*/
+void Juego::won_validate(){
+    if(ui->b1->text().toInt() == 1 &&
+       ui->b2->text().toInt() == 1 &&
+       ui->b3->text().toInt() == 1 &&
+       ui->b4->text().toInt() == 1 &&
+       ui->b5->text().toInt() == 0 &&
+       ui->b6->text().toInt() == 1 &&
+       ui->b7->text().toInt() == 1 &&
+       ui->b8->text().toInt() == 1 &&
+       ui->b9->text().toInt() == 1){
 
+        won=true;
+        escondeBotones();
 
-void Juego::gaussJordan(int A [][N], int* b, int mod) {
+    }
+    else
+     won=false;
+
+}
+void Juego::escondeBotones(){
+    if(won){
+        ui->b1->hide();
+        ui->b2->hide();
+        ui->b3->hide();
+        ui->b4->hide();
+        ui->b5->hide();
+        ui->b6->hide();
+        ui->b7->hide();
+        ui->b8->hide();
+        ui->b9->hide();
+        ui->label->setText("Has Ganado!!!");
+        ui->label->show();
+        ui->label->setAlignment(Qt::AlignCenter);
+    }
+}
+/*void Juego::gaussJordan(int A [][N], int* b, int mod) {
     int inverso, alfa;
 
     for (int i = 0; i < N; ++i) {
@@ -206,7 +241,7 @@ void Juego::gaussJordan(int A [][N], int* b, int mod) {
         }
     }
 }
-
+*/
 void Juego::on_b1_clicked()
 {
     //Modulo 2 en juego con matriz original (valido para matriz especial)
@@ -223,6 +258,7 @@ void Juego::on_b1_clicked()
         ui->b4->setText(QString::number((ui->b4->text().toInt()+1)%3));
         ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
     }
+    won_validate();
 }
 
 void Juego::on_b2_clicked()
@@ -251,7 +287,7 @@ void Juego::on_b2_clicked()
         ui->b3->setText(QString::number((ui->b3->text().toInt()+1)%3));
         ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
     }
-
+     won_validate();
 }
 
 void Juego::on_b3_clicked()
@@ -268,6 +304,7 @@ void Juego::on_b3_clicked()
         ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
         ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%3));
     }
+     won_validate();
 }
 
 void Juego::on_b4_clicked()
@@ -294,6 +331,7 @@ void Juego::on_b4_clicked()
         ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%3));
         ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
      }
+     won_validate();
 }
 
 void Juego::on_b5_clicked()
@@ -312,6 +350,7 @@ void Juego::on_b5_clicked()
         ui->b6->setText(QString::number((ui->b6->text().toInt()+1)%3));
         ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
     }
+     won_validate();
 }
 
 void Juego::on_b6_clicked()
@@ -338,6 +377,7 @@ void Juego::on_b6_clicked()
         ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
         ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
     }
+     won_validate();
 }
 
 void Juego::on_b7_clicked()
@@ -354,7 +394,7 @@ void Juego::on_b7_clicked()
         ui->b7->setText(QString::number((ui->b7->text().toInt()+1)%3));
         ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
     }
-
+    won_validate();
 
 }
 
@@ -382,6 +422,7 @@ void Juego::on_b8_clicked()
         ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
         ui->b5->setText(QString::number((ui->b5->text().toInt()+1)%3));
     }
+     won_validate();
 }
 
 void Juego::on_b9_clicked()
@@ -398,4 +439,5 @@ void Juego::on_b9_clicked()
         ui->b8->setText(QString::number((ui->b8->text().toInt()+1)%3));
         ui->b9->setText(QString::number((ui->b9->text().toInt()+1)%3));
     }
+     won_validate();
 }

@@ -31,6 +31,7 @@ FORMS    += ventana.ui \
     dialogmodulo.ui \
     juego.ui \
     seleccionmatriz.ui \
-    solucion.ui
+    solucion.ui \
+    ganador.ui
 
 DISTFILES +=

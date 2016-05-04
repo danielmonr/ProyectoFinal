@@ -29,9 +29,9 @@
   <widget class="QPushButton" name="perz_b">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>22</y>
-     <width>131</width>
+     <x>200</x>
+     <y>20</y>
+     <width>161</width>
      <height>171</height>
     </rect>
    </property>

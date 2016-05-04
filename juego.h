@@ -24,6 +24,7 @@ public:
     ~Juego();
 
 private slots:
+    void won_validate();
     void on_b1_clicked();
 
     void on_b2_clicked();
@@ -49,18 +50,20 @@ private:
     int matFinal[9];
     int restaMatInicialFinal[9];
     int matResultado[9];
+    bool won;
 
     Ui::Juego *ui;
     void cambiaTextoInicial();
+    void escondeBotones();
     void generaMatriz(int[N], int);
-    void escogeMatriz(int[N], int);
+    /*void escogeMatriz(int[N], int);
     void resuelveProblema(int[N], int[N], int[N], int[N][N], int, int);
     void gaussJordan(int A[][N], int* b, int mod);
     int modulo(int, int);
     int inversoMultiplicativo(int x, int m);
     void intercambiarRenglones(int* x, int* y, int n);
     void escalarRenglon(int* x, int alfa, int mod, int n);
-    void sumarRenglon(int* x, int* y, int alfa, int mod, int n);
+    void sumarRenglon(int* x, int* y, int alfa, int mod, int n);*/
 };
 
 #endif // JUEGO_H
